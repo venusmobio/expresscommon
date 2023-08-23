@@ -18,7 +18,7 @@ exports.list = async (req, res, next) => {
     return res.json({
       status: false,
       message: constants.message(constants.userModule, "List", false),
-      error: error
+      error: error,
     });
   }
 };
@@ -29,21 +29,23 @@ exports.list = async (req, res, next) => {
     Method = GET
 */
 exports.detail = async (req, res) => {
-    try {
-      const userList = await commonService.operations("user", "detail");
-      return res.json({
-        status: true,
-        message: constants.message(constants.userModule, "Detail"),
-        data: userList,
-      });
-    } catch (error) {
-      return res.json({
-        status: false,
-        message: constants.message(constants.userModule, "Detail", false),
-        error: error
-      });
-    }
-  };
+  try {
+    const userList = await commonService.operations("user", "detail", {
+      id: req.params.id,
+    });
+    return res.json({
+      status: true,
+      message: constants.message(constants.userModule, "Detail"),
+      data: userList,
+    });
+  } catch (error) {
+    return res.json({
+      status: false,
+      message: constants.message(constants.userModule, "Detail", false),
+      error: error,
+    });
+  }
+};
 
 /*
     User Create
@@ -66,7 +68,7 @@ exports.create = async (req, res) => {
     return res.json({
       status: false,
       message: constants.message(constants.userModule, "Create", false),
-      error: error
+      error: error,
     });
   }
 };
@@ -87,7 +89,7 @@ exports.update = async (req, res) => {
     return res.json({
       status: false,
       message: constants.message(constants.userModule, "Update", false),
-      error: error
+      error: error,
     });
   }
 };
@@ -99,7 +101,7 @@ exports.update = async (req, res) => {
 */
 exports.delete = async (req, res) => {
   try {
-    await commonService.operations("user", "delete");
+    await commonService.operations("user", "delete", { id: req.params.id });
     return res.json({
       status: false,
       message: constants.message(constants.userModule, "Delete"),
@@ -108,7 +110,7 @@ exports.delete = async (req, res) => {
     return res.json({
       status: false,
       message: constants.message(constants.userModule, "Delete", false),
-      error: error
+      error: error,
     });
   }
 };
