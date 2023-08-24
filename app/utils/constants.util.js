@@ -8,8 +8,13 @@ module.exports = {
     alreadyExist: (module) => {
         return `${module} Already Exist`
     },
+    cantBeEmpty: (fieldName) => {
+        return `${fieldName} can not be empty`
+    },
     userModule: 'User',
     authModule: 'Auth',
+    projectModule: 'Project',
+    taskModule: 'Task',
     SEND_AUTH_TOKEN: "Please send authentication token",
     JWT_SECRET_KEY: "jwt_secret_key",
     USER_NOT_EXIST_OR_ACCESS: "User cant be access or not exist!",

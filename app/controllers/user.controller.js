@@ -1,6 +1,6 @@
 // constants
-const constants = require("../utils/constants.util");
-const commonService = require("../services/common.service");
+const constants = require('../utils/constants.util');
+const commonService = require('../services/common.service');
 /*
     User List
     API URL = /users
@@ -8,16 +8,16 @@ const commonService = require("../services/common.service");
 */
 exports.list = async (req, res, next) => {
   try {
-    const userList = await commonService.operations("user", "list");
+    const userList = await commonService.operations('user', 'list');
     return res.json({
       status: true,
-      message: constants.message(constants.userModule, "List"),
+      message: constants.message(constants.userModule, 'List'),
       data: userList,
     });
   } catch (error) {
     return res.json({
       status: false,
-      message: constants.message(constants.userModule, "List", false),
+      message: constants.message(constants.userModule, 'List', false),
       error: error,
     });
   }
@@ -30,18 +30,18 @@ exports.list = async (req, res, next) => {
 */
 exports.detail = async (req, res) => {
   try {
-    const userList = await commonService.operations("user", "detail", {
+    const userList = await commonService.operations('user', 'detail', {
       id: req.params.id,
     });
     return res.json({
       status: true,
-      message: constants.message(constants.userModule, "Detail"),
+      message: constants.message(constants.userModule, 'Detail'),
       data: userList,
     });
   } catch (error) {
     return res.json({
       status: false,
-      message: constants.message(constants.userModule, "Detail", false),
+      message: constants.message(constants.userModule, 'Detail', false),
       error: error,
     });
   }
@@ -55,19 +55,19 @@ exports.detail = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const createdUser = await commonService.operations(
-      "user",
-      "create",
+      'user',
+      'create',
       req.body
     );
     return res.json({
       status: true,
-      message: constants.message(constants.userModule, "Create"),
+      message: constants.message(constants.userModule, 'Create'),
       data: createdUser,
     });
   } catch (error) {
     return res.json({
       status: false,
-      message: constants.message(constants.userModule, "Create", false),
+      message: constants.message(constants.userModule, 'Create', false),
       error: error,
     });
   }
@@ -80,15 +80,15 @@ exports.create = async (req, res) => {
 */
 exports.update = async (req, res) => {
   try {
-    await commonService.operations("user", "update", req.body);
+    await commonService.operations('user', 'update', req.body);
     return res.json({
       status: false,
-      message: constants.message(constants.userModule, "Update"),
+      message: constants.message(constants.userModule, 'Update'),
     });
   } catch (error) {
     return res.json({
       status: false,
-      message: constants.message(constants.userModule, "Update", false),
+      message: constants.message(constants.userModule, 'Update', false),
       error: error,
     });
   }
@@ -101,15 +101,15 @@ exports.update = async (req, res) => {
 */
 exports.delete = async (req, res) => {
   try {
-    await commonService.operations("user", "delete", { id: req.params.id });
+    await commonService.operations('user', 'delete', { id: req.params.id });
     return res.json({
       status: false,
-      message: constants.message(constants.userModule, "Delete"),
+      message: constants.message(constants.userModule, 'Delete'),
     });
   } catch (error) {
     return res.json({
       status: false,
-      message: constants.message(constants.userModule, "Delete", false),
+      message: constants.message(constants.userModule, 'Delete', false),
       error: error,
     });
   }

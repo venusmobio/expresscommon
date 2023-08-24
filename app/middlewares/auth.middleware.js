@@ -1,11 +1,11 @@
 // Require Packages
-let jwt = require("jsonwebtoken");
+let jwt = require('jsonwebtoken');
 
 // Require utils
-const constants = require("../utils/constants.util");
+const constants = require('../utils/constants.util');
 
 // Require Services
-const commonService = require("../services/common.service");
+const commonService = require('../services/common.service');
 
 //for create token
 exports.assignToken = async (user) => {
@@ -32,7 +32,7 @@ exports.verifyToken = async (req, res, next) => {
     }
     if (token) {
       let decoded = jwt.verify(
-        token.split(" ")[1],
+        token.split(' ')[1],
         process.env.JWT_SECRET
           ? process.env.JWT_SECRET
           : costants.JWT_SECRET_KEY
@@ -40,7 +40,7 @@ exports.verifyToken = async (req, res, next) => {
       req.userData = decoded;
 
       if (decoded.id) {
-        let user = await commonService.operations("user", "detail", {
+        let user = await commonService.operations('user', 'detail', {
           id: decoded.id,
         });
         if (user) {

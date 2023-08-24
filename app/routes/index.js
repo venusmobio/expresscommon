@@ -1,7 +1,9 @@
 // Base route path
-const baseRoute = '/api'
+const baseRoute = '/api';
 
 module.exports = (app) => {
-    app.use(`${baseRoute}/auth`, require('./auth.route'))
-    app.use(`${baseRoute}/users`, require('./user.route'))
-}
+  app.use(`${baseRoute}/auth`, require('./auth.route'));
+  app.use(`${baseRoute}/users`, require('./user.route'));
+  app.use(`${baseRoute}/projects`, require('./project.route'));
+  app.use(`${baseRoute}/tasks`, require('./project.route'));
+};

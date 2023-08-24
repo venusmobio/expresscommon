@@ -1,18 +1,19 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-param-reassign */
 // Require Packages
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
 
 // Require utils
-const constants = require("../utils/constants.util");
+const constants = require('../utils/constants.util');
 
 // Require services
-const commonService = require("../services/common.service");
-const authService = require("../services/auth.service");
+const commonService = require('../services/common.service');
+const authService = require('../services/auth.service');
 
 // Require middlewares
-const authMiddleware = require("../middlewares/auth.middleware");
+const authMiddleware = require('../middlewares/auth.middleware');
 
-/* 
+/*
     Login
     API URL = /auth/login
     Method = POST
@@ -36,22 +37,22 @@ exports.login = async (req, res) => {
     if (!isMatched) {
       return res.json({
         status: false,
-        message: constants.message(constants.authModule, "Password", false),
+        message: constants.message(constants.authModule, 'Password', false),
       });
     }
 
     // If password matches
     if (user.loginActivity.length > 0) {
-      let deviceId = req?.body?.deviceInfo?.deviceId;
+      const deviceId = req?.body?.deviceInfo?.deviceId;
       const alreadyExistDevice = user.loginActivity.find(
-        (item) => item.deviceId === deviceId
+        (item) => item.deviceId === deviceId,
       );
       if (alreadyExistDevice) {
         // Update logout time of particular device id
         user.loginActivity = user.loginActivity.map((item) => {
           if (item.deviceId === deviceId) {
-            isLogin = true;
-            item.loginCount = item.loginCount + 1;
+            item.isLogin = true;
+            item.loginCount += item.loginCount;
             item.loginTime = new Date();
             item.logoutTime = null;
           }
@@ -78,7 +79,7 @@ exports.login = async (req, res) => {
         deviceInfo: req.body?.deviceInfo,
       });
     }
-    await commonService.operations("user", "update", {
+    await commonService.operations('user', 'update', {
       id: user._id,
       loginActivity: user.loginActivity,
     });
@@ -88,7 +89,7 @@ exports.login = async (req, res) => {
 
     return res.json({
       status: true,
-      message: constants.message(constants.authModule, "Login"),
+      message: constants.message(constants.authModule, 'Login'),
       data: {
         user,
         token,
@@ -97,13 +98,13 @@ exports.login = async (req, res) => {
   } catch (error) {
     return res.json({
       status: false,
-      message: constants.message(constants.authModule, "Login", false),
-      error: error,
+      message: constants.message(constants.authModule, 'Login', false),
+      error,
     });
   }
 };
 
-/* 
+/*
     Signup
     API URL = /auth/signup
     Method = POST
@@ -123,32 +124,31 @@ exports.signup = async (req, res) => {
     req.body.password = await bcrypt.hashSync(req.body.password, 10);
     req.body.isActive = true;
     // Create new user with the it's detail
-    const newUser = await commonService.operations("user", "create", req.body);
+    const newUser = await commonService.operations('user', 'create', req.body);
 
     return res.json({
       status: true,
-      message: constants.message(constants.authModule, "Signup"),
+      message: constants.message(constants.authModule, 'Signup'),
       data: newUser,
     });
   } catch (error) {
-    console.log(error);
     return res.json({
       status: false,
-      message: constants.message(constants.authModule, "Signup", false),
-      error: error,
+      message: constants.message(constants.authModule, 'Signup', false),
+      error,
     });
   }
 };
 
-/* 
+/*
     Logout
     API URL = /auth/logout
     Method = POST
 */
 exports.logout = async (req, res) => {
   try {
-    const user = req.userData.user;
-    const deviceId = req.body.deviceId;
+    const { user } = req.userData;
+    const { deviceId } = req.body;
 
     // Update logout time of particular device id
     user.loginActivity = user.loginActivity.map((item) => {
@@ -160,20 +160,20 @@ exports.logout = async (req, res) => {
     });
 
     // Update user login activity details
-    await commonService.operations("user", "update", {
+    await commonService.operations('user', 'update', {
       id: user._id,
       loginActivity: user.loginActivity,
     });
 
     return res.json({
       status: false,
-      message: constants.message(constants.userModule, "Logout"),
+      message: constants.message(constants.userModule, 'Logout'),
     });
   } catch (error) {
     return res.json({
       status: false,
-      message: constants.message(constants.authModule, "Signup", false),
-      error: error,
+      message: constants.message(constants.authModule, 'Signup', false),
+      error,
     });
   }
 };
