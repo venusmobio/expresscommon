@@ -45,7 +45,7 @@ exports.login = async (req, res) => {
     if (user.loginActivity.length > 0) {
       const deviceId = req?.body?.deviceInfo?.deviceId;
       const alreadyExistDevice = user.loginActivity.find(
-        (item) => item.deviceId === deviceId,
+        (item) => item.deviceId === deviceId
       );
       if (alreadyExistDevice) {
         // Update logout time of particular device id

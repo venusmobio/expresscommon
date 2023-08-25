@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Prompt the user for input
-read -p "Enter a dynamic route name: " ROUTE_NAME
+# read -p "Enter a dynamic route name: " ROUTE_NAME
 # read -p "Enter a dynamic directory name (for controller and validator): " DIRECTORY_NAME
 # read -p "Enter a dynamic file name (without extension): " FILE_NAME
-
+ROUTE_NAME=$1
 DIRECTORY_NAME=app
 FILE_NAME=${ROUTE_NAME}
 
@@ -12,6 +12,8 @@ CAPITALIZED_ROUTE_NAME=$(tr '[:lower:]' '[:upper:]' <<< "${ROUTE_NAME:0:1}")"${R
 
 # Convert ROUTE_NAME to lowercase for case-insensitive comparison
 LOWER_CASE_ROUTE_NAME=$(echo "$ROUTE_NAME" | tr '[:upper:]' '[:lower:]')
+
+# ------------------- APPEND NEW ROUTE INTO ROUTE/INDEX.JS FILE --------------------------------------
 
 # Define the route content with dynamic FILE_NAME
 ROUTE_CONTENT=$(cat <<EOT
@@ -42,6 +44,8 @@ echo "Route content appended to routes/index.js for dynamic route name: $ROUTE_N
 mkdir -p "${DIRECTORY_NAME}/controllers"
 mkdir -p "${DIRECTORY_NAME}/validators"
 mkdir -p "${DIRECTORY_NAME}/routes"
+
+# ------------------- CREATE NEW ROUTE INTO ROUTE/${ROUTE_NAME}.JS FILE --------------------------------------
 
 # Define the route content with dynamic FILE_NAME
 ROUTE_CONTENT=$(cat <<EOT
@@ -75,6 +79,8 @@ echo "$ROUTE_CONTENT" > "${DIRECTORY_NAME}/routes/${FILE_NAME}.route.js"
 
 echo "${DIRECTORY_NAME}/routes/${FILE_NAME}.route.js file created and populated with dynamic route name: $ROUTE_NAME."
 
+# ------------------- CREATE NEW MODEL INTO MODELS/${ROUTE_NAME}.MODEL.JS FILE --------------------------------------
+
 # Define the model content with dynamic MODEL_NAME
 MODEL_CONTENT=$(cat <<EOT
 const mongoose = require('mongoose');
@@ -106,6 +112,8 @@ EOT
 echo "$MODEL_CONTENT" > "${DIRECTORY_NAME}/models/${LOWER_CASE_ROUTE_NAME}.model.js"
 
 echo "Model file ${DIRECTORY_NAME}/models/${LOWER_CASE_ROUTE_NAME}.model.js created and populated with dynamic model name: $ROUTE_NAME."
+
+# ------------------- CREATE NEW CONTROLLER INTO CONTROLLERS/${ROUTE_NAME}.CONTROLLER.JS FILE --------------------------------------
 
 # Create the controller file with the provided name and content
 CONTROLLER_CONTENT=$(cat <<EOT
@@ -235,6 +243,8 @@ echo "$CONTROLLER_CONTENT" > "${DIRECTORY_NAME}/controllers/${FILE_NAME}.control
 
 echo "${DIRECTORY_NAME}/controllers/${FILE_NAME}.controller.js file created and populated for controller logic."
 
+# ------------------- APPEND MODELNAME INTO UTILS/CONSTANTS.UTIL.JS FILE --------------------------------------
+
 # Define the constants content with dynamic FILE_NAME
 CONSTANT_CONTENT=$(cat <<EOT
     ${FILE_NAME}Module: '${CAPITALIZED_ROUTE_NAME}',
@@ -251,6 +261,8 @@ $CONSTANT_CONTENT
 
 echo "Constant content appended to utils/constants.util.js for dynamic route name: $ROUTE_NAME."
 
+# ------------------- CREATE NEW SERVICE INTO SERVICES/${ROUTE_NAME}.SERVICE.JS FILE --------------------------------------
+
 # Define the service content with dynamic ROUTE_NAME
 SERVICE_CONTENT=$(cat <<EOT
 const ${CAPITALIZED_ROUTE_NAME}Model = require('../models/${LOWER_CASE_ROUTE_NAME}.model.js')
@@ -264,11 +276,13 @@ echo "$SERVICE_CONTENT" > "${DIRECTORY_NAME}/services/${LOWER_CASE_ROUTE_NAME}.s
 
 echo "Service file ${DIRECTORY_NAME}/services/${LOWER_CASE_ROUTE_NAME}.service.js created and populated with dynamic model name: $ROUTE_NAME."
 
+# ------------------- CREATE NEW VALIDATOR INTO VALIDATORS/${ROUTE_NAME}.VALIDATOR.JS FILE --------------------------------------
+
 # Create the validator file with the provided name and content
 VALIDATOR_CONTENT=$(cat <<EOT
 const { body } = require('express-validator');
 
-exports.create${FILE_NAME}Schema = [
+exports.create${CAPITALIZED_ROUTE_NAME}Schema = [
   // Your validation rules here
 ];
 EOT

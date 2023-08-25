@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "create-route": "scripts/route_script.sh"
+    "create-route": "scripts/route_script.sh",
+    "create-function": "scripts/controller_function.sh",
+    "create-model": "scripts/model_script.sh"
   },
   "author": "kd_bolaniya",
   "license": "ISC",
