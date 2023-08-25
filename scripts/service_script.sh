@@ -13,10 +13,10 @@ EOT
 )
 
 # Check if the service already exists
-if grep -q "${SERVICE_CONTENT}" "app/services/${SERVICE_NAME}.service.js"; then
-  echo "Service with name '${SERVICE_NAME}' already exists. Exiting..."
-  exit 1
-fi
+# if grep -q "${SERVICE_CONTENT}" "app/services/${SERVICE_NAME}.service.js"; then
+#   echo "Service with name '${SERVICE_NAME}' already exists. Exiting..."
+#   exit 1
+# fi
 
 echo ${SERVICE_CONTENT} > app/services/${SERVICE_NAME}.service.js
 

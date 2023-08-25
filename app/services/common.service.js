@@ -1,4 +1,4 @@
-//
+// Simple crud
 exports.operations = async (modelName, action, payload = {}) => {
   const model = require(`../models/${modelName}.model`);
 
@@ -6,7 +6,11 @@ exports.operations = async (modelName, action, payload = {}) => {
     case "list":
       return await model.find(payload);
     case "detail":
-      return await model.findOne({ _id: payload.id });
+      if(payload.id) {
+        payload._id = payload.id
+      }
+      delete payload.id
+      return await model.findOne(payload);
     case "create":
       return await model.create(payload);
     case "update":

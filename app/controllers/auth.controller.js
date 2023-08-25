@@ -9,6 +9,7 @@ const constants = require('../utils/constants.util');
 // Require services
 const commonService = require('../services/common.service');
 const authService = require('../services/auth.service');
+const { sendMail } = require('../services/email.service');
 
 // Require middlewares
 const authMiddleware = require('../middlewares/auth.middleware');
@@ -173,6 +174,100 @@ exports.logout = async (req, res) => {
     return res.json({
       status: false,
       message: constants.message(constants.authModule, 'Signup', false),
+      error,
+    });
+  }
+};
+
+/*
+    Forgot Password
+    API URL = /auth/forgot-password
+    Method = POST
+*/
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { email, resetLink } = req.body;
+
+    const user = await commonService.operations('user', 'detail', {
+      email: email,
+    });
+
+    if (!user) {
+      return res.json({
+        status: false,
+        message: constants.notFound('Email'),
+      });
+    }
+
+    // Generate reset token and set expiry
+    const resetToken = bcrypt.hashSync(email, 10);
+    const resetTokenExpiry = Date.now() + 3600000; // Token expires in 1 hour
+
+    await commonService.operations('user', 'update', {
+      id: user._id,
+      resetToken,
+      resetTokenExpiry,
+    });
+
+    const data = {
+      projectName: '',
+      resetLink,
+      toEmail: email,
+      subject: 'Forgot Password',
+    };
+
+    await sendMail(data);
+
+    return res.json({
+      status: true,
+      message: constants.message(constants.authModule, 'forgotPassword'),
+    });
+  } catch (error) {
+    return res.json({
+      status: false,
+      message: constants.message(constants.authModule, 'forgotPassword', false),
+      error,
+    });
+  }
+};
+
+/*
+    Reset Password
+    API URL = /auth/reset-password
+    Method = POST
+*/
+exports.resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    const user = await commonService.operations('user', 'detail', {
+      resetToken: token,
+      resetTokenExpiry: { $gt: Date.now() }
+    });
+    
+    if (!user) {
+      return res.json({
+        status: false,
+        message: constants.INVALID_OR_EXPIRED_TOKEN,
+      });
+    }
+
+    await commonService.operations('user', 'update', {
+      id: user._id,
+      password: bcrypt.hashSync(newPassword, 10),
+      resetToken: null,
+      resetTokenExpiry: null,
+    });
+
+    return res.json({
+      status: true,
+      message: constants.message(constants.authModule, 'resetPassword'),
+    });
+  } catch (error) {
+    console.log(error)
+    return res.json({
+      status: false,
+      message: constants.message(constants.authModule, 'resetPassword', false),
       error,
     });
   }

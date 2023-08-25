@@ -31,6 +31,8 @@ const userSchema = Schema(
       type: Boolean,
       default: true,
     },
+    resetToken: String,
+    resetTokenExpiry: Date,
     loginActivity: [
       {
         isLogin: {
