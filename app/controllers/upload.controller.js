@@ -115,6 +115,12 @@ exports.update = async (req, res) => {
 */
 exports.delete = async (req, res) => {
   try {
+    const uploadDetail = await commonService.operations("upload", "detail", {
+      id: req.params.id,
+    });
+    fs.unlink(uploadDetail.uploadName, (err) => {
+      if (err) throw err;
+    });
     await commonService.operations("upload", "delete", { id: req.params.id });
     return res.json({
       status: false,
