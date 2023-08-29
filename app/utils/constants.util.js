@@ -15,6 +15,7 @@ module.exports = {
     authModule: 'Auth',
     projectModule: 'Project',
     taskModule: 'Task',
+    uploadModule: 'Upload',
     SEND_AUTH_TOKEN: "Please send authentication token",
     JWT_SECRET_KEY: "jwt_secret_key",
     USER_NOT_EXIST_OR_ACCESS: "User cant be access or not exist!",

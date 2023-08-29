@@ -9,7 +9,8 @@
     "create-route": "scripts/route_script.sh",
     "create-function": "scripts/controller_function.sh",
     "create-model": "scripts/model_script.sh",
-    "create-service": "scripts/service_script.sh"
+    "create-service": "scripts/service_script.sh",
+    "create-validator": "scripts/validator_script.sh"
   },
   "author": "kd_bolaniya",
   "license": "ISC",
