@@ -16,7 +16,7 @@ const uploadValidator = require("../validators/upload.validator");
 // upload crud routes
 router.get('/', uploadController.list);
 router.get('/:id', uploadController.detail);
-router.post('/', validate(checkSchema(uploadValidator.createUploadSchema)),upload, uploadController.create);
+router.post('/',upload, validate(checkSchema(uploadValidator.createUploadSchema)), uploadController.create);
 router.put('/:id', upload ,uploadController.update);
 router.delete('/:id', uploadController.delete);
 

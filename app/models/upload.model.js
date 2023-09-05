@@ -6,6 +6,14 @@ const uploadSchema = Schema({
         type: String,
         required: true
     },
+    avatarLink:{
+        type: String,
+        required: true
+    },
+    avatar:{
+        type: Buffer,
+        required:true
+    },
     createdBy: {
         type: mongoose.Types.ObjectId,
         ref: 'User',

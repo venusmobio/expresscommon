@@ -1,3 +1,4 @@
+// require packages
 const multer = require('multer');
 const fs = require("fs");
 
@@ -18,10 +19,7 @@ var storage = multer.diskStorage({
 // Set the storage, file filter and file size with multer
 const upload = multer({
   storage,
-  //   limits: {
-  //     fieldNameSize: 200,
-  //     fileSize: 5 * 1024 * 1024,
-  //   },
+  limits: { fileSize: 16 * 1024 * 1024 }, // 16 MB in bytes
 }).single('file');
 
 module.exports = upload;

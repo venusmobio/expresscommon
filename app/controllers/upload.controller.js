@@ -1,9 +1,12 @@
 // Controller logic for upload
 
+// require packages
+const fs = require("fs");
+const path = require("path")
+
 // constants
 const constants = require("../utils/constants.util");
 const commonService = require("../services/common.service");
-const fs = require("fs");
 
 
 /*
@@ -59,7 +62,28 @@ exports.detail = async (req, res) => {
 */
 exports.create = async (req, res) => {
   try {
-    req.body.uploadName = req.file.path;
+    if(!req.file){
+      return res.json({
+        status:false,
+        message: constants.cantBeEmpty("file"),
+      })
+    }
+    const uploadExist = await commonService.operations("upload", "detail", {
+      uploadName: req.file.originalname,
+    });
+    if(uploadExist)
+    {
+      return res.json({
+        status: false,
+        message: constants.alreadyExist(constants.uploadModule),
+      });
+    }
+    const image = req.file.path;
+    const imageBuffer = fs.readFileSync(image);
+    const absolutePath = path.resolve(image);
+    req.body.avatar = imageBuffer
+    req.body.uploadName = req.file.originalname;
+    req.body.avatarLink = absolutePath;
     const createdUpload = await commonService.operations(
       "upload",
       "create",
@@ -86,12 +110,33 @@ exports.create = async (req, res) => {
 */
 exports.update = async (req, res) => {
   try {
+    if(!req.file){
+      return res.json({
+        status:false,
+        message: constants.cantBeEmpty("file"),
+      })
+    }
+    const uploadExist = await commonService.operations("upload", "detail", {
+      uploadName: req.file.originalname,
+    });
+    if(uploadExist)
+    {
+      return res.json({
+        status: false,
+        message: constants.alreadyExist(constants.uploadModule),
+      });
+    }
     req.body.id = req.params.id;
-    req.body.uploadName = req.file.path;
+    const image = req.file.path;
+    const imageBuffer = fs.readFileSync(image);
+    const absolutePath = path.resolve(image);
+    req.body.avatar = imageBuffer
+    req.body.uploadName = req.file.originalname;
+    req.body.avatarLink = absolutePath;
     const uploadDetail = await commonService.operations("upload", "detail", {
       id: req.params.id,
     });
-    fs.unlink(uploadDetail.uploadName, (err) => {
+    fs.unlink(uploadDetail.avatarLink, (err) => {
       if (err) throw err;
     });
     await commonService.operations("upload", "update", req.body);
@@ -118,7 +163,7 @@ exports.delete = async (req, res) => {
     const uploadDetail = await commonService.operations("upload", "detail", {
       id: req.params.id,
     });
-    fs.unlink(uploadDetail.uploadName, (err) => {
+    fs.unlink(uploadDetail.avatarLink, (err) => {
       if (err) throw err;
     });
     await commonService.operations("upload", "delete", { id: req.params.id });
