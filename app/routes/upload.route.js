@@ -7,17 +7,22 @@ const { checkSchema } = require('express-validator');
 const uploadController = require('../controllers/upload.controller');
 
 // Require middlewares
-const { validate } = require("../middlewares/validate.middleware");
-const  upload = require("../middlewares/multer.middleware")
+const { validate } = require('../middlewares/validate.middleware');
+const upload = require('../middlewares/multer.middleware');
 
 // Require validators
-const uploadValidator = require("../validators/upload.validator");
+const uploadValidator = require('../validators/upload.validator');
 
 // upload crud routes
 router.get('/', uploadController.list);
 router.get('/:id', uploadController.detail);
-router.post('/',upload, validate(checkSchema(uploadValidator.createUploadSchema)), uploadController.create);
-router.put('/:id', upload ,uploadController.update);
+router.post(
+  '/',
+  upload,
+  validate(checkSchema(uploadValidator.createUploadSchema)),
+  uploadController.create
+);
+router.put('/:id', upload, uploadController.update);
 router.delete('/:id', uploadController.delete);
 
 module.exports = router;

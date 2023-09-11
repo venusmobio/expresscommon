@@ -57,11 +57,7 @@ exports.detail = async (req, res) => {
 */
 exports.create = async (req, res) => {
   try {
-    const createdproject = await commonService.operations(
-      'project',
-      'create',
-      req.body,
-    );
+    const createdproject = await commonService.operations('project', 'create', req.body);
     return res.json({
       status: true,
       message: constants.message(constants.projectModule, 'Create'),

@@ -1,9 +1,9 @@
-const constants = require("../utils/constants.util");
+const constants = require('../utils/constants.util');
 
 /* create task schema */
 exports.createTaskSchema = {
   taskName: {
     notEmpty: true,
-    errorMessage: constants.cantBeEmpty("Task name"),
+    errorMessage: constants.cantBeEmpty('Task name'),
   },
 };

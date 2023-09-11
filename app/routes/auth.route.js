@@ -14,17 +14,9 @@ const { validate } = require('../middlewares/validate.middleware');
 const authValidator = require('../validators/auth.validator');
 
 // login route
-router.post(
-  '/login',
-  validate(checkSchema(authValidator.loginSchema)),
-  authController.login
-);
+router.post('/login', validate(checkSchema(authValidator.loginSchema)), authController.login);
 // Signup route
-router.post(
-  '/signup',
-  validate(checkSchema(authValidator.signupSchema)),
-  authController.signup
-);
+router.post('/signup', validate(checkSchema(authValidator.signupSchema)), authController.signup);
 // Logout route
 router.post('/logout', authMiddleware.verifyToken, authController.logout);
 // Forgot Password route
@@ -40,11 +32,7 @@ router.post(
   authController.resetPassword
 );
 // Profile route
-router.get(
-  '/profile',
-  authMiddleware.verifyToken,
-  authController.profile
-);
+router.get('/profile', authMiddleware.verifyToken, authController.profile);
 // Update profile route
 router.post(
   '/update-profile',

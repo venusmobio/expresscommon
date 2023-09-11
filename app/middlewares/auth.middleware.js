@@ -8,7 +8,7 @@ const constants = require('../utils/constants.util');
 const commonService = require('../services/common.service');
 
 //for create token
-exports.assignToken = async (user) => {
+exports.assignToken = async user => {
   let payload = {
     id: user._id,
   };
@@ -33,9 +33,7 @@ exports.verifyToken = async (req, res, next) => {
     if (token) {
       let decoded = jwt.verify(
         token.split(' ')[1],
-        process.env.JWT_SECRET
-          ? process.env.JWT_SECRET
-          : costants.JWT_SECRET_KEY
+        process.env.JWT_SECRET ? process.env.JWT_SECRET : constants.JWT_SECRET_KEY
       );
       req.userData = decoded;
 

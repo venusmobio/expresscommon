@@ -8,7 +8,8 @@ let url = '';
 // db connection environment wise
 switch (NODE_ENV) {
   case 'local':
-    url = 'mongodb://admin:password@localhost:27017/prolink-develop?authMechanism=DEFAULT&authSource=admin';
+    url =
+      'mongodb://admin:password@localhost:27017/prolink-develop?authMechanism=DEFAULT&authSource=admin';
     break;
   case 'test':
     url = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`;

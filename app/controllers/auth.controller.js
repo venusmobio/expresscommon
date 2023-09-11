@@ -45,12 +45,10 @@ exports.login = async (req, res) => {
     // If password matches
     if (user.loginActivity.length > 0) {
       const deviceId = req?.body?.deviceInfo?.deviceId;
-      const alreadyExistDevice = user.loginActivity.find(
-        (item) => item.deviceId === deviceId
-      );
+      const alreadyExistDevice = user.loginActivity.find(item => item.deviceId === deviceId);
       if (alreadyExistDevice) {
         // Update logout time of particular device id
-        user.loginActivity = user.loginActivity.map((item) => {
+        user.loginActivity = user.loginActivity.map(item => {
           if (item.deviceId === deviceId) {
             item.isLogin = true;
             item.loginCount += item.loginCount;
@@ -152,7 +150,7 @@ exports.logout = async (req, res) => {
     const { deviceId } = req.body;
 
     // Update logout time of particular device id
-    user.loginActivity = user.loginActivity.map((item) => {
+    user.loginActivity = user.loginActivity.map(item => {
       if (item.deviceId === deviceId) {
         item.isLogin = false;
         item.logoutTime = new Date();

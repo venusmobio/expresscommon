@@ -1,31 +1,30 @@
 // Controller logic for upload
 
 // require packages
-const fs = require("fs");
-const path = require("path")
+const fs = require('fs');
+const path = require('path');
 
 // constants
-const constants = require("../utils/constants.util");
-const commonService = require("../services/common.service");
-
+const constants = require('../utils/constants.util');
+const commonService = require('../services/common.service');
 
 /*
     Upload List
     API URL = /upload
     Method = GET
 */
-exports.list = async (req, res, next) => {
+exports.list = async (req, res) => {
   try {
-    const uploadList = await commonService.operations("upload", "list");
+    const uploadList = await commonService.operations('upload', 'list');
     return res.json({
       status: true,
-      message: constants.message(constants.uploadModule, "List"),
+      message: constants.message(constants.uploadModule, 'List'),
       data: uploadList,
     });
   } catch (error) {
     return res.json({
       status: false,
-      message: constants.message(constants.uploadModule, "List", false),
+      message: constants.message(constants.uploadModule, 'List', false),
       error: error,
     });
   }
@@ -38,18 +37,18 @@ exports.list = async (req, res, next) => {
 */
 exports.detail = async (req, res) => {
   try {
-    const uploadDetail = await commonService.operations("upload", "detail", {
+    const uploadDetail = await commonService.operations('upload', 'detail', {
       id: req.params.id,
     });
     return res.json({
       status: true,
-      message: constants.message(constants.uploadModule, "Detail"),
+      message: constants.message(constants.uploadModule, 'Detail'),
       data: uploadDetail,
     });
   } catch (error) {
     return res.json({
       status: false,
-      message: constants.message(constants.uploadModule, "Detail", false),
+      message: constants.message(constants.uploadModule, 'Detail', false),
       error: error,
     });
   }
@@ -62,17 +61,16 @@ exports.detail = async (req, res) => {
 */
 exports.create = async (req, res) => {
   try {
-    if(!req.file){
+    if (!req.file) {
       return res.json({
-        status:false,
-        message: constants.cantBeEmpty("file"),
-      })
+        status: false,
+        message: constants.cantBeEmpty('file'),
+      });
     }
-    const uploadExist = await commonService.operations("upload", "detail", {
+    const uploadExist = await commonService.operations('upload', 'detail', {
       uploadName: req.file.originalname,
     });
-    if(uploadExist)
-    {
+    if (uploadExist) {
       return res.json({
         status: false,
         message: constants.alreadyExist(constants.uploadModule),
@@ -81,23 +79,19 @@ exports.create = async (req, res) => {
     const image = req.file.path;
     const imageBuffer = fs.readFileSync(image);
     const absolutePath = path.resolve(image);
-    req.body.avatar = imageBuffer
+    req.body.avatar = imageBuffer;
     req.body.uploadName = req.file.originalname;
     req.body.avatarLink = absolutePath;
-    const createdUpload = await commonService.operations(
-      "upload",
-      "create",
-      req.body
-    );
+    const createdUpload = await commonService.operations('upload', 'create', req.body);
     return res.json({
       status: true,
-      message: constants.message(constants.uploadModule, "Create"),
+      message: constants.message(constants.uploadModule, 'Create'),
       data: createdUpload,
     });
   } catch (error) {
     return res.json({
       status: false,
-      message: constants.message(constants.uploadModule, "Create", false),
+      message: constants.message(constants.uploadModule, 'Create', false),
       error: error,
     });
   }
@@ -110,17 +104,16 @@ exports.create = async (req, res) => {
 */
 exports.update = async (req, res) => {
   try {
-    if(!req.file){
+    if (!req.file) {
       return res.json({
-        status:false,
-        message: constants.cantBeEmpty("file"),
-      })
+        status: false,
+        message: constants.cantBeEmpty('file'),
+      });
     }
-    const uploadExist = await commonService.operations("upload", "detail", {
+    const uploadExist = await commonService.operations('upload', 'detail', {
       uploadName: req.file.originalname,
     });
-    if(uploadExist)
-    {
+    if (uploadExist) {
       return res.json({
         status: false,
         message: constants.alreadyExist(constants.uploadModule),
@@ -130,24 +123,24 @@ exports.update = async (req, res) => {
     const image = req.file.path;
     const imageBuffer = fs.readFileSync(image);
     const absolutePath = path.resolve(image);
-    req.body.avatar = imageBuffer
+    req.body.avatar = imageBuffer;
     req.body.uploadName = req.file.originalname;
     req.body.avatarLink = absolutePath;
-    const uploadDetail = await commonService.operations("upload", "detail", {
+    const uploadDetail = await commonService.operations('upload', 'detail', {
       id: req.params.id,
     });
-    fs.unlink(uploadDetail.avatarLink, (err) => {
+    fs.unlink(uploadDetail.avatarLink, err => {
       if (err) throw err;
     });
-    await commonService.operations("upload", "update", req.body);
+    await commonService.operations('upload', 'update', req.body);
     return res.json({
       status: false,
-      message: constants.message(constants.uploadModule, "Update"),
+      message: constants.message(constants.uploadModule, 'Update'),
     });
   } catch (error) {
     return res.json({
       status: false,
-      message: constants.message(constants.uploadModule, "Update", false),
+      message: constants.message(constants.uploadModule, 'Update', false),
       error: error,
     });
   }
@@ -160,21 +153,21 @@ exports.update = async (req, res) => {
 */
 exports.delete = async (req, res) => {
   try {
-    const uploadDetail = await commonService.operations("upload", "detail", {
+    const uploadDetail = await commonService.operations('upload', 'detail', {
       id: req.params.id,
     });
-    fs.unlink(uploadDetail.avatarLink, (err) => {
+    fs.unlink(uploadDetail.avatarLink, err => {
       if (err) throw err;
     });
-    await commonService.operations("upload", "delete", { id: req.params.id });
+    await commonService.operations('upload', 'delete', { id: req.params.id });
     return res.json({
       status: false,
-      message: constants.message(constants.uploadModule, "Delete"),
+      message: constants.message(constants.uploadModule, 'Delete'),
     });
   } catch (error) {
     return res.json({
       status: false,
-      message: constants.message(constants.uploadModule, "Delete", false),
+      message: constants.message(constants.uploadModule, 'Delete', false),
       error: error,
     });
   }

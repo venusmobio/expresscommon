@@ -1,19 +1,18 @@
 // require packages
 const multer = require('multer');
-const fs = require("fs");
-
+const fs = require('fs');
 
 // Get the file name and extension with multer
 var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        fs.mkdir('./uploads/', (err) => {
-            cb(null, './uploads/');
-        })
-    },
-    filename: (req, file, cb) => {
-        const filename = `${file.originalname}`;
-        cb(null, filename);
-      },
+  destination: function (req, file, cb) {
+    fs.mkdir('./uploads/', () => {
+      cb(null, './uploads/');
+    });
+  },
+  filename: (req, file, cb) => {
+    const filename = `${file.originalname}`;
+    cb(null, filename);
+  },
 });
 
 // Set the storage, file filter and file size with multer

@@ -15,11 +15,7 @@ const userValidator = require('../validators/user.validator');
 // User list route
 router.get('/', userController.list);
 router.get('/:id', userController.detail);
-router.post(
-  '/',
-  validate(checkSchema(userValidator.createUserSchema)),
-  userController.create
-);
+router.post('/', validate(checkSchema(userValidator.createUserSchema)), userController.create);
 router.put('/:id', userController.update);
 router.delete('/:id', userController.delete);
 

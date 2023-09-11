@@ -15,11 +15,7 @@ const taskValidator = require('../validators/task.validator');
 // Task crud routes
 router.get('/', taskController.list);
 router.get('/:id', taskController.detail);
-router.post(
-  '/',
-  validate(checkSchema(taskValidator.createTaskSchema)),
-  taskController.create
-);
+router.post('/', validate(checkSchema(taskValidator.createTaskSchema)), taskController.create);
 router.put('/:id', taskController.update);
 router.delete('/:id', taskController.delete);
 

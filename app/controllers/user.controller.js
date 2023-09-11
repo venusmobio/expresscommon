@@ -6,7 +6,7 @@ const commonService = require('../services/common.service');
     API URL = /users
     Method = GET
 */
-exports.list = async (req, res, next) => {
+exports.list = async (req, res) => {
   try {
     const userList = await commonService.operations('user', 'list');
     return res.json({
@@ -54,11 +54,7 @@ exports.detail = async (req, res) => {
 */
 exports.create = async (req, res) => {
   try {
-    const createdUser = await commonService.operations(
-      'user',
-      'create',
-      req.body
-    );
+    const createdUser = await commonService.operations('user', 'create', req.body);
     return res.json({
       status: true,
       message: constants.message(constants.userModule, 'Create'),
