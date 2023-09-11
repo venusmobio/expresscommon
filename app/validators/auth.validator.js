@@ -49,7 +49,7 @@ exports.forgotPasswordSchema = {
   resetLink: {
     notEmpty: true,
     errorMessage: constants.cantBeEmpty('Reset password link'),
-  }
+  },
 };
 
 /* Reset password schema */
@@ -61,5 +61,17 @@ exports.resetPasswordSchema = {
   newPassword: {
     notEmpty: true,
     errorMessage: constants.cantBeEmpty('New password'),
-  }
+  },
+};
+
+/* Update profile schema */
+exports.updateProfileSchema = {
+  firstName: {
+    notEmpty: true,
+    errorMessage: constants.cantBeEmpty('First name'),
+  },
+  lastName: {
+    notEmpty: true,
+    errorMessage: constants.cantBeEmpty('Last name'),
+  },
 };

@@ -204,7 +204,7 @@ exports.update = async (req, res) => {
   try {
     await commonService.operations("${ROUTE_NAME}", "update", req.body);
     return res.json({
-      status: false,
+      status: true,
       message: constants.message(constants.${ROUTE_NAME}Module, "Update"),
     });
   } catch (error) {
@@ -225,7 +225,7 @@ exports.delete = async (req, res) => {
   try {
     await commonService.operations("${ROUTE_NAME}", "delete", { id: req.params.id });
     return res.json({
-      status: false,
+      status: true,
       message: constants.message(constants.${ROUTE_NAME}Module, "Delete"),
     });
   } catch (error) {

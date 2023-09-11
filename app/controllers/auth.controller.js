@@ -45,12 +45,10 @@ exports.login = async (req, res) => {
     // If password matches
     if (user.loginActivity.length > 0) {
       const deviceId = req?.body?.deviceInfo?.deviceId;
-      const alreadyExistDevice = user.loginActivity.find(
-        (item) => item.deviceId === deviceId
-      );
+      const alreadyExistDevice = user.loginActivity.find(item => item.deviceId === deviceId);
       if (alreadyExistDevice) {
         // Update logout time of particular device id
-        user.loginActivity = user.loginActivity.map((item) => {
+        user.loginActivity = user.loginActivity.map(item => {
           if (item.deviceId === deviceId) {
             item.isLogin = true;
             item.loginCount += item.loginCount;
@@ -152,7 +150,7 @@ exports.logout = async (req, res) => {
     const { deviceId } = req.body;
 
     // Update logout time of particular device id
-    user.loginActivity = user.loginActivity.map((item) => {
+    user.loginActivity = user.loginActivity.map(item => {
       if (item.deviceId === deviceId) {
         item.isLogin = false;
         item.logoutTime = new Date();
@@ -242,9 +240,9 @@ exports.resetPassword = async (req, res) => {
 
     const user = await commonService.operations('user', 'detail', {
       resetToken: token,
-      resetTokenExpiry: { $gt: Date.now() }
+      resetTokenExpiry: { $gt: Date.now() },
     });
-    
+
     if (!user) {
       return res.json({
         status: false,
@@ -264,10 +262,80 @@ exports.resetPassword = async (req, res) => {
       message: constants.message(constants.authModule, 'resetPassword'),
     });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.json({
       status: false,
       message: constants.message(constants.authModule, 'resetPassword', false),
+      error,
+    });
+  }
+};
+
+/*
+    Profile
+    API URL = /auth/profile
+    Method = GET
+*/
+exports.profile = async (req, res) => {
+  try {
+    const { user } = req.userData;
+
+    const isExist = await commonService.operations('user', 'detail', {
+      id: user._id,
+    });
+
+    if (!isExist) {
+      return res.json({
+        status: false,
+        message: constants.notFound('User'),
+      });
+    }
+
+    return res.json({
+      status: true,
+      message: constants.message(constants.authModule, 'profile'),
+      data: user,
+    });
+  } catch (error) {
+    return res.json({
+      status: false,
+      message: constants.message(constants.authModule, 'profile', false),
+      error,
+    });
+  }
+};
+
+/*
+    Update profile
+    API URL = /auth/update-profile
+    Method = POST
+*/
+exports.updateProfile = async (req, res) => {
+  try {
+    const { user } = req.userData;
+
+    const isExist = await commonService.operations('user', 'detail', {
+      id: user._id,
+    });
+
+    if (!isExist) {
+      return res.json({
+        status: false,
+        message: constants.notFound('User'),
+      });
+    }
+
+    req.body.id = user._id;
+    await commonService.operations('user', 'update', req.body);
+
+    return res.json({
+      status: true,
+      message: constants.message(constants.authModule, 'update profile'),
+    });
+  } catch (error) {
+    return res.json({
+      status: false,
+      message: constants.message(constants.authModule, 'update profile', false),
       error,
     });
   }
