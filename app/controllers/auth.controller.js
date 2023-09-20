@@ -26,7 +26,7 @@ exports.login = async (req, res) => {
     const user = await authService.findByEmail(email);
 
     if (!user) {
-      return res.json({
+      return res.status(400).json({
         status: false,
         message: constants.notFound(constants.userModule),
       });
@@ -36,7 +36,7 @@ exports.login = async (req, res) => {
     const isMatched = await bcrypt.compare(password, user.password);
 
     if (!isMatched) {
-      return res.json({
+      return res.status(401).json({
         status: false,
         message: constants.message(constants.authModule, 'Password', false),
       });
@@ -86,7 +86,7 @@ exports.login = async (req, res) => {
     // assign new token
     const token = await authMiddleware.assignToken(user);
 
-    return res.json({
+    return res.status(200).json({
       status: true,
       message: constants.message(constants.authModule, 'Login'),
       data: {
@@ -95,7 +95,7 @@ exports.login = async (req, res) => {
       },
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       status: false,
       message: constants.message(constants.authModule, 'Login', false),
       error,
@@ -113,7 +113,7 @@ exports.signup = async (req, res) => {
     const user = await authService.findByEmail(req.body.email);
 
     if (user) {
-      return res.json({
+      return res.status(400).json({
         status: false,
         message: constants.alreadyExist(constants.userModule),
       });
@@ -125,13 +125,13 @@ exports.signup = async (req, res) => {
     // Create new user with the it's detail
     const newUser = await commonService.operations('user', 'create', req.body);
 
-    return res.json({
+    return res.status(200).json({
       status: true,
       message: constants.message(constants.authModule, 'Signup'),
       data: newUser,
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       status: false,
       message: constants.message(constants.authModule, 'Signup', false),
       error,
@@ -164,12 +164,12 @@ exports.logout = async (req, res) => {
       loginActivity: user.loginActivity,
     });
 
-    return res.json({
-      status: false,
+    return res.status(200).json({
+      status: true,
       message: constants.message(constants.userModule, 'Logout'),
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       status: false,
       message: constants.message(constants.authModule, 'Signup', false),
       error,
@@ -191,7 +191,7 @@ exports.forgotPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res.json({
+      return res.status(400).json({
         status: false,
         message: constants.notFound('Email'),
       });
@@ -216,12 +216,12 @@ exports.forgotPassword = async (req, res) => {
 
     await sendMail(data);
 
-    return res.json({
+    return res.status(200).json({
       status: true,
       message: constants.message(constants.authModule, 'forgotPassword'),
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       status: false,
       message: constants.message(constants.authModule, 'forgotPassword', false),
       error,
@@ -244,7 +244,7 @@ exports.resetPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res.json({
+      return res.status(400).json({
         status: false,
         message: constants.INVALID_OR_EXPIRED_TOKEN,
       });
@@ -257,13 +257,12 @@ exports.resetPassword = async (req, res) => {
       resetTokenExpiry: null,
     });
 
-    return res.json({
+    return res.status(200).json({
       status: true,
       message: constants.message(constants.authModule, 'resetPassword'),
     });
   } catch (error) {
-    console.log(error);
-    return res.json({
+    return res.status(500).json({
       status: false,
       message: constants.message(constants.authModule, 'resetPassword', false),
       error,
@@ -285,19 +284,19 @@ exports.profile = async (req, res) => {
     });
 
     if (!isExist) {
-      return res.json({
+      return res.status(401).json({
         status: false,
         message: constants.notFound('User'),
       });
     }
 
-    return res.json({
+    return res.status(200).json({
       status: true,
       message: constants.message(constants.authModule, 'profile'),
       data: user,
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       status: false,
       message: constants.message(constants.authModule, 'profile', false),
       error,
@@ -319,7 +318,7 @@ exports.updateProfile = async (req, res) => {
     });
 
     if (!isExist) {
-      return res.json({
+      return res.status(400).json({
         status: false,
         message: constants.notFound('User'),
       });
@@ -328,12 +327,12 @@ exports.updateProfile = async (req, res) => {
     req.body.id = user._id;
     await commonService.operations('user', 'update', req.body);
 
-    return res.json({
+    return res.status(200).json({
       status: true,
       message: constants.message(constants.authModule, 'update profile'),
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       status: false,
       message: constants.message(constants.authModule, 'update profile', false),
       error,

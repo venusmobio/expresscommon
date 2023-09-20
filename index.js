@@ -10,3 +10,5 @@ const app = require('./app/server');
 app.listen(port, () => {
   console.log(`Server running at ${port}`);
 });
+
+module.exports = app;
