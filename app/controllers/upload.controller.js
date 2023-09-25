@@ -6,6 +6,8 @@ const path = require('path');
 
 // constants
 const constants = require('../utils/constants.util');
+
+// Require services
 const commonService = require('../services/common.service');
 
 /*
@@ -16,13 +18,13 @@ const commonService = require('../services/common.service');
 exports.list = async (req, res) => {
   try {
     const uploadList = await commonService.operations('upload', 'list');
-    return res.json({
+    return res.status(200).json({
       status: true,
       message: constants.message(constants.uploadModule, 'List'),
       data: uploadList,
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       status: false,
       message: constants.message(constants.uploadModule, 'List', false),
       error: error,
@@ -40,13 +42,13 @@ exports.detail = async (req, res) => {
     const uploadDetail = await commonService.operations('upload', 'detail', {
       id: req.params.id,
     });
-    return res.json({
+    return res.status(200).json({
       status: true,
       message: constants.message(constants.uploadModule, 'Detail'),
       data: uploadDetail,
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       status: false,
       message: constants.message(constants.uploadModule, 'Detail', false),
       error: error,
@@ -62,7 +64,7 @@ exports.detail = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     if (!req.file) {
-      return res.json({
+      return res.status(400).json({
         status: false,
         message: constants.cantBeEmpty('file'),
       });
@@ -71,7 +73,7 @@ exports.create = async (req, res) => {
       uploadName: req.file.originalname,
     });
     if (uploadExist) {
-      return res.json({
+      return res.status(400).json({
         status: false,
         message: constants.alreadyExist(constants.uploadModule),
       });
@@ -83,13 +85,13 @@ exports.create = async (req, res) => {
     req.body.uploadName = req.file.originalname;
     req.body.avatarLink = absolutePath;
     const createdUpload = await commonService.operations('upload', 'create', req.body);
-    return res.json({
+    return res.status(200).json({
       status: true,
       message: constants.message(constants.uploadModule, 'Create'),
       data: createdUpload,
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       status: false,
       message: constants.message(constants.uploadModule, 'Create', false),
       error: error,
@@ -105,7 +107,7 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     if (!req.file) {
-      return res.json({
+      return res.status(400).json({
         status: false,
         message: constants.cantBeEmpty('file'),
       });
@@ -114,7 +116,7 @@ exports.update = async (req, res) => {
       uploadName: req.file.originalname,
     });
     if (uploadExist) {
-      return res.json({
+      return res.status(400).json({
         status: false,
         message: constants.alreadyExist(constants.uploadModule),
       });
@@ -133,12 +135,12 @@ exports.update = async (req, res) => {
       if (err) throw err;
     });
     await commonService.operations('upload', 'update', req.body);
-    return res.json({
-      status: false,
+    return res.status(200).json({
+      status: true,
       message: constants.message(constants.uploadModule, 'Update'),
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       status: false,
       message: constants.message(constants.uploadModule, 'Update', false),
       error: error,
@@ -160,12 +162,12 @@ exports.delete = async (req, res) => {
       if (err) throw err;
     });
     await commonService.operations('upload', 'delete', { id: req.params.id });
-    return res.json({
-      status: false,
+    return res.status(200).json({
+      status: true,
       message: constants.message(constants.uploadModule, 'Delete'),
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       status: false,
       message: constants.message(constants.uploadModule, 'Delete', false),
       error: error,

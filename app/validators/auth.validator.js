@@ -75,15 +75,3 @@ exports.updateProfileSchema = {
     errorMessage: constants.cantBeEmpty('Last name'),
   },
 };
-
-/* Update profile schema */
-exports.updateProfileSchema = {
-  firstName: {
-    notEmpty: true,
-    errorMessage: constants.cantBeEmpty('First name'),
-  },
-  lastName: {
-    notEmpty: true,
-    errorMessage: constants.cantBeEmpty('Last name'),
-  },
-};
