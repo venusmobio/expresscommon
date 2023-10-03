@@ -4,19 +4,19 @@ exports.operations = async (modelName, action, payload = {}) => {
 
   switch (action) {
     case 'list':
-      return await model.find(payload);
+      return model.find(payload);
     case 'detail':
       if (payload.id) {
         payload._id = payload.id;
       }
       delete payload.id;
-      return await model.findOne(payload);
+      return model.findOne(payload);
     case 'create':
-      return await model.create(payload);
+      return model.create(payload);
     case 'update':
-      return await model.findByIdAndUpdate({ _id: payload.id }, payload);
+      return model.findByIdAndUpdate({ _id: payload.id }, payload);
     case 'delete':
-      return await model.findByIdAndDelete({ _id: payload.id });
+      return model.findByIdAndDelete({ _id: payload.id });
     default:
       console.log('testing');
   }

@@ -15,7 +15,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "pre-commit": "lint-staged",
-    "test": "npx nyc mocha tests  --timeout 10000"
+    "test": "nyc mocha tests  --timeout 10000",
+    "sonar-scanner": "node_modules/sonar-scanner/bin/sonar-scanner",
+    "coverage": "nyc report --reporter=lcov",
+    "sonarlint": "sonarlint --src 'app/**'"
   },
   "author": "kd_bolaniya",
   "license": "ISC",
@@ -49,6 +52,8 @@
     "lint-staged": "^14.0.1",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0",
-    "prettier": "^3.0.3"
+    "prettier": "^3.0.3",
+    "sonar-scanner": "^3.1.0",
+    "sonarlint": "^1.1.0"
   }
 }
